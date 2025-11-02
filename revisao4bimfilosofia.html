@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards 4º Bimestre - 1ª Série Filosofia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flashcard-front {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .flashcard-back {
+            background-color: #f3f4f6;
+            color: #111827;
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-2">Flashcards 4º Bimestre - 1ª Série Filosofia</h1>
+        <p class="text-gray-600 text-center mb-2">Clique no card para ver a resposta. Use os botões para navegar.</p>
+        <p class="text-sm text-gray-500 text-center mb-6">Produzido por - <a href="https://www.youtube.com/@razoesfilosoficas" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">www.youtube.com/@razoesfilosoficas</a></p>
+
+
+        <div id="game-container">
+            <div class="flashcard-container w-full h-80 md:h-96" onclick="flipCard()">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-face flashcard-front">
+                        <p id="question" class="text-xl md:text-2xl font-semibold"></p>
+                    </div>
+                    <div class="flashcard-face flashcard-back">
+                        <p id="answer" class="text-lg md:text-xl"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center mt-6">
+                 <div id="controls-container" class="flex items-center space-x-4">
+                    <p id="counter" class="text-lg font-semibold text-gray-700 w-28"></p>
+                    <div class="flex items-center space-x-2">
+                        <button id="decrease-font" class="bg-white w-10 h-10 rounded-lg shadow-md flex items-center justify-center text-2xl font-bold text-gray-700 hover:bg-gray-200 transition-colors">-</button>
+                        <button id="increase-font" class="bg-white w-10 h-10 rounded-lg shadow-md flex items-center justify-center text-xl font-bold text-gray-700 hover:bg-gray-200 transition-colors">+</button>
+                    </div>
+                </div>
+                <div id="all-correct-message" class="hidden text-center">
+                     <p class="text-2xl font-bold text-green-600">Parabéns, você memorizou tudo!</p>
+                     <button id="restart-button" class="mt-4 bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">Recomeçar</button>
+                </div>
+            </div>
+
+            <div id="navigation-buttons" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                <button id="prev-button" class="bg-white text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-300 col-span-1">Anterior</button>
+                <button id="random-button" class="bg-purple-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-300 col-span-2 sm:col-span-1">Aleatório</button>
+                <button id="correct-button" class="bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-300 col-span-2 sm:col-span-1">Acertei!</button>
+                <button id="next-button" class="bg-white text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-300 col-span-1">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const flashcardsData = [
+            { "question": "(Aula 1) Segundo Günther Anders, a tecnocracia não é o governo dos técnicos, mas sim a realidade em que o mundo é inteiramente moldado pela __.", "answer": "tecnologia" },
+            { "question": "(Aula 1) Para Marilena Chaui, qual a diferença entre instrumentos técnicos e tecnológicos?", "answer": "Instrumentos técnicos são prolongamentos do corpo humano para aumentar suas capacidades, enquanto os tecnológicos destinam-se a dominar e transformar o mundo." },
+            { "question": "(Aula 2) Que filósofo propõe uma ética da responsabilidade voltada para o futuro, com foco nos impactos globais e intergeracionais da tecnologia?", "answer": "Hans Jonas." },
+            { "question": "(Aula 2) Qual é o novo imperativo categórico proposto por Hans Jonas para a sociedade tecnológica?", "answer": "\"Age de modo que os efeitos de tua ação sejam compatíveis com a permanência de uma vida humana autêntica na Terra\"." },
+            { "question": "(Aula 2) De acordo com Hans Jonas, o que motivou a necessidade de uma nova ética da responsabilidade?", "answer": "Os perigos iminentes decorrentes do abuso do poderio tecnológico, que ameaçam a continuidade da vida no planeta." },
+            { "question": "(Aula 2) O Objetivo de Desenvolvimento Sustentável (ODS) 12 visa assegurar padrões de __ e de __ sustentáveis.", "answer": "produção, consumo" },
+            { "question": "(Aula 3) Que filósofo francês propõe um \"contrato natural\" para repensar nossa relação com o meio ambiente, considerando a natureza como sujeito de direito?", "answer": "Michel Serres." },
+            { "question": "(Aula 3) Para Michel Serres, a crise ambiental atual é também uma crise __ e __, exigindo uma mudança na forma como a natureza é vista.", "answer": "cultural, ética" },
+            { "question": "(Aula 3) Segundo Michel Serres, além da poluição material, existe uma poluição __ que afeta nossos pensamentos e valores, e sem combatê-la, não venceremos a primeira.", "answer": "moral" },
+            { "question": "(Aula 4) Que pensador quilombola defendia a \"contracolonização\" e propunha o \"envolvimento\" em vez do \"desenvolvimento\"?", "answer": "Antônio Bispo dos Santos (Nêgo Bispo)." },
+            { "question": "(Aula 4) Que filósofo e líder indígena critica a ideia de \"humanidade\" da civilização tecnológica por separar radicalmente os humanos da natureza?", "answer": "Ailton Krenak." },
+            { "question": "(Aula 4) O que Nêgo Bispo chama de \"refluxo filosófico\"?", "answer": "A capacidade dos povos colonizados de ressignificar termos pejorativos (como 'quilombo') e transformá-los em instrumentos de afirmação e luta por direitos." },
+            { "question": "(Aula 4) No livro \"Ideias para adiar o fim do mundo\", Ailton Krenak argumenta que a abstração civilizatória que nos descola da Terra suprime a __ e nega a pluralidade das formas de vida.", "answer": "diversidade" },
+            { "question": "(Aula 5) Que sociólogo e filósofo polonês descreveu a era atual como \"modernidade líquida\", onde relações, valores e identidades são fluidos e instáveis?", "answer": "Zygmunt Bauman." },
+            { "question": "(Aula 5) Que filósofo francês caracteriza a sociedade atual como uma \"sociedade do hiperconsumo\", organizada em torno de uma \"felicidade paradoxal\"?", "answer": "Gilles Lipovetsky." },
+            { "question": "(Aula 5) De acordo com Zygmunt Bauman, por que o consumo se torna central na modernidade líquida?", "answer": "Porque, diante da falta de estruturas sólidas e duradouras, o consumo serve para preencher vazios e construir identidades passageiras." },
+            { "question": "(Aula 5) Quais são as três fases da civilização consumidora, segundo Gilles Lipovetsky?", "answer": "1. Nascimento dos mercados de massa; 2. Sociedade da abundância e hedonismo de massa; 3. Hiperconsumo individualizado." },
+            { "question": "(Aula 6) Que filósofo sul-coreano desenvolveu o conceito de \"sociedade do cansaço\" para descrever a exaustão generalizada resultante da pressão por produtividade e autoaperfeiçoamento?", "answer": "Byung-Chul Han." },
+            { "question": "(Aula 6) Segundo Byung-Chul Han, a sociedade do cansaço se caracteriza pela __, que é mais eficiente que a exploração do outro, pois vem com um sentimento de liberdade.", "answer": "autoexploração" },
+            { "question": "(Aula 6) Qual é a principal diferença entre a \"sociedade viral\" do século XX e a \"sociedade do cansaço\" do século XXI, segundo Byung-Chul Han?", "answer": "A sociedade viral se organizava contra o \"outro\" (negatividade), enquanto a sociedade do cansaço se estrutura no excesso de estímulos e na autocobrança (positividade)." },
+            { "question": "(Aula 6) A \"liberdade paradoxal\" descrita por Byung-Chul Han refere-se a quê?", "answer": "A uma liberdade que se transforma em violência e coerção, pois o indivíduo se autoexplora acreditando estar livre, o que gera adoecimentos psíquicos." },
+            { "question": "(Aula 7) No mito de Prometeu, o que o fogo roubado dos deuses representa para a humanidade?", "answer": "Representa o conhecimento, a inovação, a técnica e a capacidade humana de transformar a natureza e superar suas limitações físicas." },
+            { "question": "(Aula 7) Qual é a principal ambivalência ou dualidade do \"fogo prometeico\" que serve de alerta para a tecnologia moderna?", "answer": "A tecnologia confere poder e conforto, mas seu uso irresponsável pode ser destrutivo e gerar consequências irreversíveis para a sociedade e o meio ambiente." },
+            { "question": "(Aula 7) A crônica é um gênero textual que aborda temas do __ com uma perspectiva crítica, utilizando linguagem __ e texto breve.", "answer": "cotidiano, coloquial" },
+            { "question": "(Aula 8) Que filósofo francês definiu a condição pós-moderna como a \"incredulidade em relação às metanarrativas\"?", "answer": "Jean-François Lyotard." },
+            { "question": "(Aula 8) O que são \"metanarrativas\", segundo a crítica de Lyotard?", "answer": "São grandes narrativas explicativas da realidade que pretendem orientar a humanidade para um futuro de progresso e emancipação, como o Iluminismo e o Marxismo." },
+            { "question": "(Aula 8) Na condição pós-moderna, Lyotard argumenta que o conhecimento tende a ser valorizado por sua __, transformando-se em uma mercadoria.", "answer": "utilidade econômica (operatividade)" },
+            { "question": "(Aula 8) Como alternativa às metanarrativas, o que Lyotard sugere que devemos valorizar?", "answer": "As pequenas narrativas e as múltiplas vozes, que refletem a complexidade e a diversidade da realidade." },
+            { "question": "(Aula 9) A seguridade social no Brasil é um sistema que reúne políticas públicas em três áreas principais. Quais são elas?", "answer": "Previdência social, assistência social e saúde pública." },
+            { "question": "(Aula 9) A Declaração Universal dos Direitos Humanos estabelece a seguridade social como um direito humano fundamental em qual de seus artigos?", "answer": "Artigo 22." },
+            { "question": "(Aula 9) A noção de dignidade humana, central para a seguridade social, foi especialmente destacada na filosofia de Immanuel Kant. Qual era a base da dignidade para ele?", "answer": "O fato de o ser humano ser dotado de razão e autonomia moral, devendo ser tratado sempre como um fim em si mesmo, e nunca como um meio." },
+            { "question": "(Aula 9) No contexto da teoria de John Rawls, a seguridade social pode ser vista como um instrumento de __ que visa beneficiar os menos favorecidos.", "answer": "justiça distributiva" },
+            { "question": "(Aula 10) O que foi o Estado de bem-estar social (Welfare State)?", "answer": "Um modelo de Estado que atua como provedor de direitos sociais dos cidadãos, intervindo na sociedade para garantir segurança, educação, saúde, etc." },
+            { "question": "(Aula 10) Segundo o sociólogo T. H. Marshall, quais são os três tipos de direitos que compõem a cidadania substantiva?", "answer": "Direitos civis (liberdade individual), políticos (participação) e sociais (bem-estar)." },
+            { "question": "(Aula 10) Que filósofo alemão analisou as crises do Estado de bem-estar social, como a crise de legitimidade, econômica e de solidariedade?", "answer": "Jürgen Habermas." },
+            { "question": "(Aula 10) Para Jürgen Habermas, as sociedades modernas dispõem de três recursos para satisfazer suas necessidades: o dinheiro, o poder administrativo e a __.", "answer": "solidariedade" },
+            { "question": "(Aula 10) Qual teoria Jürgen Habermas desenvolveu para fortalecer a solidariedade e a legitimidade democrática por meio do diálogo inclusivo e racional?", "answer": "A teoria da democracia deliberativa." },
+            { "question": "(Aula 11) Que filósofo alemão, da Escola de Frankfurt, defende que os conflitos sociais são motivados por uma luta por reconhecimento?", "answer": "Axel Honneth." },
+            { "question": "(Aula 11) Segundo Axel Honneth, a luta por reconhecimento ocorre em três esferas. Quais são elas?", "answer": "Amor (relações primárias), Direito (relações jurídicas) e Solidariedade (comunidade de valores)." },
+            { "question": "(Aula 11) Quais são as três formas de desrespeito que correspondem à negação do reconhecimento nas esferas definidas por Honneth?", "answer": "Maus-tratos e violações (negação do amor), privação de direitos e exclusão (negação do direito) e degradação e ofensa (negação da solidariedade)." },
+            { "question": "(Aula 11) Para Honneth, o desrespeito é uma forma de __ moral, pois fere a imagem positiva que uma pessoa adquire de si mesma de maneira intersubjetiva.", "answer": "injustiça" },
+            { "question": "(Aula 12) Que filósofa e teórica feminista critica a abordagem de Axel Honneth por focar exclusivamente no reconhecimento, argumentando que a justiça social deve integrar também a redistribuição?", "answer": "Nancy Fraser." },
+            { "question": "(Aula 12) Qual é a concepção de justiça proposta por Nancy Fraser?", "answer": "Uma concepção bidimensional de justiça, que inclui tanto o reconhecimento (justiça cultural) quanto a redistribuição (justiça econômica)." },
+            { "question": "(Aula 12) Para Nancy Fraser, por que focar apenas no reconhecimento é insuficiente?", "answer": "Porque enfraquece a crítica social, limita o potencial de emancipação e desvia a atenção das questões econômicas e estruturais que causam injustiça." },
+            { "question": "(Aula 12) Segundo Fraser, as injustiças culturais e econômicas estão entrelaçadas de forma que se reforçam mutuamente, criando um __.", "answer": "círculo vicioso de subordinação cultural e econômica" },
+            { "question": "(Aula 13) Qual artigo da Constituição Federal de 1988 estabelece como objetivos fundamentais a construção de uma sociedade justa e solidária e a promoção do bem de todos sem preconceitos?", "answer": "O Artigo 3º." },
+            { "question": "(Aula 13) Estatutos como o da Pessoa Idosa, da Igualdade Racial e a Lei Maria da Penha são exemplos de políticas públicas que buscam garantir o quê?", "answer": "O reconhecimento público da diversidade e a garantia de direitos para romper com práticas discriminatórias, articulando reconhecimento e redistribuição." },
+            { "question": "(Aula 13) Políticas de __ buscam resolver problemas gerados pela discriminação, que muitas vezes causam injustiças econômicas.", "answer": "reconhecimento" },
+            { "question": "(Aula 13) De acordo com a filósofa Marilena Chaui, a visão da política como __ é a que permite a criação, conservação e expansão dos direitos para todos.", "answer": "poder coletivo" },
+            { "question": "(Aula 14) O que é uma polêmica?", "answer": "Um debate intenso sobre um assunto relevante que gera opiniões fortes e divergentes, envolvendo juízos de valor e conflitos de interesse." },
+            { "question": "(Aula 14) Qual gênero textual argumentativo é caracterizado por intervir criticamente em debates públicos, apresentando uma tese e defendendo-a com argumentos consistentes?", "answer": "Artigo de opinião." },
+            { "question": "(Aula 14) Quais são as quatro partes essenciais de um artigo de opinião?", "answer": "Título, Introdução (com a tese), Desenvolvimento (com os argumentos) e Conclusão." },
+            { "question": "(Aula 1) A pergunta 'Se você não está pagando pelo produto, então você é o produto' refere-se a qual aspecto das tecnologias digitais contemporâneas?", "answer": "Ao modelo de negócios em que os dados e a atenção dos usuários são o verdadeiro produto vendido a anunciantes." },
+            { "question": "(Aula 3) A frase de Descartes 'O homem deve se tornar mestre e senhor da natureza' representa qual paradigma que Michel Serres critica?", "answer": "O paradigma de exploração e domínio sobre a natureza, que Serres argumenta que precisamos superar." },
+            { "question": "(Aula 10) A Constituição brasileira de 1988, conhecida como 'constituição cidadã', representou um avanço em termos de Estado de bem-estar social por quê?", "answer": "Porque ampliou direitos sociais da população, como o acesso à saúde pública (SUS) e à assistência social." },
+            { "question": "(Aula 11) O que é o fenômeno do 'teto de vidro'?", "answer": "São barreiras invisíveis e não explícitas que dificultam a ascensão de mulheres e outras minorias a cargos de liderança no mundo do trabalho." },
+            { "question": "(Aula 9) A teoria da justiça de John Rawls é conhecida como 'justiça como __'.", "answer": "equidade" },
+            { "question": "(Aula 12) O objetivo da abordagem de Nancy Fraser é garantir a __ dos indivíduos na esfera pública.", "answer": "paridade participativa" },
+            { "question": "(Aula 13) O que são 'ações afirmativas', conforme definido no Estatuto da Igualdade Racial?", "answer": "Programas e medidas especiais adotados pelo Estado e pela iniciativa privada para a correção das desigualdades raciais e promoção da igualdade de oportunidades." },
+            { "question": "(Aula 14) Qual foi a principal atualização da Lei de Cotas (Lei 14.723 de 2023) mencionada na aula?", "answer": "A inclusão dos quilombolas entre os grupos beneficiados pela reserva de vagas nas instituições de ensino superior." }
+        ];
+
+        let activeCards = [...flashcardsData];
+        let currentIndex = 0;
+        let fontSizeMultiplier = 1.0;
+        const FONT_STEP = 0.1;
+        const MIN_FONT_MULTIPLIER = 0.5;
+
+        const flashcard = document.getElementById('flashcard');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const counterEl = document.getElementById('counter');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const randomButton = document.getElementById('random-button');
+        const correctButton = document.getElementById('correct-button');
+        const allCorrectMessage = document.getElementById('all-correct-message');
+        const navigationButtons = document.getElementById('navigation-buttons');
+        const restartButton = document.getElementById('restart-button');
+        const increaseFontButton = document.getElementById('increase-font');
+        const decreaseFontButton = document.getElementById('decrease-font');
+        const controlsContainer = document.getElementById('controls-container');
+
+        function applyFontSize() {
+            const baseQuestionSize = window.innerWidth < 768 ? 1.25 : 1.5; // Corresponds to text-xl and md:text-2xl
+            const baseAnswerSize = window.innerWidth < 768 ? 1.125 : 1.25; // Corresponds to text-lg and md:text-xl
+            questionEl.style.fontSize = `${baseQuestionSize * fontSizeMultiplier}rem`;
+            answerEl.style.fontSize = `${baseAnswerSize * fontSizeMultiplier}rem`;
+        }
+
+        function updateCard() {
+            flashcard.classList.remove('is-flipped');
+            if (activeCards.length > 0) {
+                controlsContainer.classList.remove('hidden');
+                questionEl.textContent = activeCards[currentIndex].question;
+                answerEl.textContent = activeCards[currentIndex].answer;
+                counterEl.textContent = `Card ${currentIndex + 1} de ${activeCards.length}`;
+            } else {
+                questionEl.textContent = 'Parabéns!';
+                answerEl.textContent = 'Você respondeu todas as perguntas corretamente!';
+                counterEl.textContent = '';
+                navigationButtons.classList.add('hidden');
+                controlsContainer.classList.add('hidden');
+                allCorrectMessage.classList.remove('hidden');
+            }
+        }
+
+        function flipCard() {
+            if (activeCards.length > 0) {
+                flashcard.classList.toggle('is-flipped');
+            }
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (activeCards.length > 0) {
+                currentIndex = (currentIndex - 1 + activeCards.length) % activeCards.length;
+                updateCard();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (activeCards.length > 0) {
+                currentIndex = (currentIndex + 1) % activeCards.length;
+                updateCard();
+            }
+        });
+
+        randomButton.addEventListener('click', () => {
+            if (activeCards.length > 0) {
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * activeCards.length);
+                } while (activeCards.length > 1 && newIndex === currentIndex);
+                currentIndex = newIndex;
+                updateCard();
+            }
+        });
+
+        correctButton.addEventListener('click', () => {
+            if (activeCards.length > 0) {
+                activeCards.splice(currentIndex, 1);
+                if (currentIndex >= activeCards.length) {
+                    currentIndex = 0;
+                }
+                updateCard();
+            }
+        });
+
+        restartButton.addEventListener('click', () => {
+            activeCards = [...flashcardsData];
+            currentIndex = 0;
+            navigationButtons.classList.remove('hidden');
+            allCorrectMessage.classList.add('hidden');
+            updateCard();
+        });
+        
+        increaseFontButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fontSizeMultiplier += FONT_STEP;
+            applyFontSize();
+        });
+
+        decreaseFontButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (fontSizeMultiplier > MIN_FONT_MULTIPLIER) {
+                fontSizeMultiplier -= FONT_STEP;
+                applyFontSize();
+            }
+        });
+
+        // Inicializa o primeiro card
+        updateCard();
+        applyFontSize();
+    </script>
+</body>
+</html>
